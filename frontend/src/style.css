@@ -1,0 +1,75 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: "Segoe UI", "Microsoft YaHei", sans-serif;
+  background: #f4f5f7;
+  color: #2c3e50;
+}
+
+.page { min-height: 100vh; }
+
+/* ---------- 登录页 ---------- */
+.auth-card {
+  max-width: 360px;
+  margin: 12vh auto;
+  background: #fff;
+  border-radius: 12px;
+  padding: 32px 28px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.auth-card h1 { font-size: 22px; text-align: center; }
+.auth-card .sub { font-size: 12px; color: #8a94a6; text-align: center; margin-bottom: 8px; }
+
+.tabs { display: flex; gap: 8px; }
+.tabs button {
+  flex: 1; padding: 8px; border: 1px solid #dcdfe6; background: #fff;
+  border-radius: 6px; cursor: pointer;
+}
+.tabs button.active { background: #409eff; color: #fff; border-color: #409eff; }
+
+input {
+  padding: 10px 12px; border: 1px solid #dcdfe6; border-radius: 6px;
+  font-size: 14px; width: 100%;
+}
+input:focus { outline: none; border-color: #409eff; }
+
+.error { color: #f56c6c; font-size: 13px; }
+
+.primary {
+  padding: 10px; background: #409eff; color: #fff; border: none;
+  border-radius: 6px; font-size: 14px; cursor: pointer;
+}
+.primary:disabled { opacity: 0.6; cursor: default; }
+.primary.sm { padding: 4px 10px; font-size: 12px; }
+
+.ghost {
+  padding: 4px 10px; background: #fff; border: 1px solid #dcdfe6;
+  border-radius: 6px; cursor: pointer; font-size: 12px;
+}
+.danger { padding: 4px 10px; background: #fff; border: 1px solid #fbc4c4; color: #f56c6c; border-radius: 6px; cursor: pointer; font-size: 12px; }
+
+/* ---------- 任务页 ---------- */
+.task-page { max-width: 640px; margin: 40px auto; padding: 0 16px; }
+.task-page header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.task-page h2 { font-size: 20px; }
+.count { font-size: 13px; color: #909399; margin-left: 6px; }
+
+.add-row { display: flex; gap: 8px; margin-bottom: 16px; }
+.add-row input:first-child { flex: 1.2; }
+.add-row input:nth-child(2) { flex: 1; }
+
+.list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.list li {
+  display: flex; align-items: center; gap: 10px;
+  background: #fff; border-radius: 8px; padding: 12px 14px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+.list li.done .title { text-decoration: line-through; color: #b0b6bf; }
+.list .body { flex: 1; display: flex; flex-direction: column; }
+.list .title { font-size: 14px; }
+.list .desc { font-size: 12px; color: #909399; }
+.list .edit { flex: 1; }
+.list .empty { justify-content: center; color: #909399; font-size: 13px; }
