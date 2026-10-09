@@ -6,7 +6,7 @@
 
 | 层 | 技术 |
 |---|---|
-| 后端 | ASP.NET Core 8 Web API、EF Core（SQLite）、JWT Bearer 认证、BCrypt 密码加密、Swagger |
+| 后端 | ASP.NET Core 8 Web API、EF Core（**SQL Server**）、JWT Bearer 认证、BCrypt 密码加密、Swagger |
 | 前端 | Vue 3（Composition API）、Vite、Vue Router、Axios |
 
 ## 功能
@@ -24,7 +24,7 @@ backend/
 ├── Controllers/
 │   ├── AuthController.cs      # 注册 / 登录 / 签发 JWT
 │   └── TasksController.cs     # 任务 CRUD（[Authorize] 保护）
-├── Data/AppDbContext.cs       # EF Core 上下文（SQLite）
+├── Data/AppDbContext.cs       # EF Core 上下文（SQL Server）
 ├── Models/
 │   ├── User.cs
 │   └── TaskItem.cs
@@ -47,12 +47,30 @@ frontend/
 
 ### 1. 启动后端（端口 5000）
 
+> 后端使用 **SQL Server**。先确保本机（或网络可达）有一个 SQL Server 实例，再改 `backend/appsettings.json` 里的 `ConnectionStrings:Default`。默认连接串指向 LocalDB（随 Visual Studio / VS Build Tools 自带）。
+
+**连接串三种常见写法：**
+
+```jsonc
+// A. LocalDB（装了 Visual Studio 最常见，免额外服务）
+"Default": "Server=(localdb)\\mssqllocaldb;Database=TaskApiDb;Trusted_Connection=true;TrustServerCertificate=true"
+
+// B. Docker 起一个 SQL Server（不装 VS 也能跑）
+//   docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=YourStrong!Pass" -p 1433:1433 -d mcr.microsoft.com/mssql/server:2022-latest
+"Default": "Server=localhost,1433;Database=TaskApiDb;User Id=sa;Password=YourStrong!Pass;TrustServerCertificate=true"
+
+// C. 任意远程 / Azure SQL Server
+"Default": "Server=your-server.database.windows.net,1433;Database=TaskApiDb;User Id=appuser;Password=xxx;Encrypt=true"
+```
+
+然后启动：
+
 ```bash
 cd backend
 dotnet run --urls http://localhost:5000
 ```
 
-首次启动会自动在 `backend/taskapi.db` 创建 SQLite 数据库，Swagger 文档在 `http://localhost:5000/swagger`。
+首次启动会按需创建 `TaskApiDb` 数据库与表，Swagger 文档在 `http://localhost:5000/swagger`。
 
 ### 2. 启动前端（端口 5173）
 
@@ -68,7 +86,7 @@ npm run dev
 
 - RESTful 路由约定（`GET/POST/PUT/DELETE /api/tasks`）
 - `[Authorize]` 属性 + JWT Bearer 中间件做接口保护
-- EF Core LINQ 查询与 SQLite 持久化
+- EF Core LINQ 查询与 SQL Server 持久化（行级权限隔离靠 `UserId` 过滤，贴近商业项目真实栈）
 - DTO 与实体分离、统一异常返回格式
 - 每条数据按 `UserId` 做行级归属校验（越权访问返回 404）
 

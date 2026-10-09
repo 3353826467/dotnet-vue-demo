@@ -11,7 +11,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<AppDbContext>(opt =>
-    opt.UseSqlite(builder.Configuration.GetConnectionString("Default")));
+    opt.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
 
 var jwtKey = builder.Configuration["Jwt:Key"] ?? throw new InvalidOperationException("Jwt:Key missing");
 var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? "TaskApi";
@@ -36,7 +36,8 @@ builder.Services.AddCors(opt => opt.AddPolicy("web", p =>
 
 var app = builder.Build();
 
-// 自动建库建表（demo 用 EnsureCreated，正式项目建议 EF Migrations）
+// 自动建库建表（demo 用 EnsureCreated；SQL Server 会在首次连接时按需创建数据库。
+// 正式项目建议改用 EF Migrations：dotnet ef migrations add Init && dotnet ef database update）
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
